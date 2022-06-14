@@ -212,14 +212,15 @@ namespace OSDP.Net
                 foreach (var device in _configuredDevices.ToArray())
                 {
                     // Right now it always sends sequence 0
-                    if (!IsPolling)
-                    {
-                        device.MessageControl.ResetSequence();
-                    }
+                    //if (!IsPolling)
+                    //{
+                    //    device.MessageControl.ResetSequence();
+                    //}
 
                     // Requested delay for multi-messages and resets
                     if (device.RequestDelay > DateTime.UtcNow)
                     {
+                        _logger?.LogInformation($"Waiting for request delay.");
                         continue;
                     }
                     
@@ -241,6 +242,7 @@ namespace OSDP.Net
                         else if(IsPolling && !device.IsConnected)
                         {
                             device.RequestDelay = DateTime.UtcNow + TimeSpan.FromSeconds(1);
+                            _logger?.LogInformation($"Setting request delay: {device.RequestDelay}");
                         }
                     }
                     catch (Exception exception)
@@ -454,6 +456,7 @@ namespace OSDP.Net
 
         private async Task<Reply> SendCommandAndReceiveReply(Command command, Device device)
         {
+            _logger.LogInformation($"Sending command: {command.Type}");
             byte[] commandData;
             try
             {

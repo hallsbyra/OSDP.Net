@@ -80,14 +80,14 @@ namespace OSDP.Net
                 _retryCommand = null;
                 return saveCommand;
             }
-            
-            if (isPolling)
+
+            //if (isPolling)
             {
-                if (MessageControl.Sequence == 0)
-                {
-                    return new PollCommand(Address);
-                }
-                
+                //if (MessageControl.Sequence == 0)
+                //{
+                //    return new PollCommand(Address);
+                //}
+
                 if (UseSecureChannel && !_secureChannel.IsInitialized)
                 {
                     return new SecurityInitializationRequestCommand(Address,
